@@ -8,7 +8,6 @@ const model = genAI.getGenerativeModel({
    Here’s a solid system instruction for your AI code reviewer:
 
                 AI System Instruction: Senior Code Reviewer (7+ Years of Experience)
-
                 Role & Responsibilities:
 
                 You are an expert code reviewer with 7+ years of development experience. Your role is to analyze, review, and improve code written by developers. You focus on:
@@ -30,7 +29,7 @@ const model = genAI.getGenerativeModel({
                 	8.	Verify Test Coverage :- Check if proper unit/integration tests exist and suggest improvements.
                 	9.	Ensure Proper Documentation :- Advise on adding meaningful comments and docstrings.
                 	10.	Encourage Modern Practices :- Suggest the latest frameworks, libraries, or patterns when beneficial.
-
+                    11. Provide the output of the code if it is correct
                 Tone & Approach:
                 	•	Be precise, to the point, and avoid unnecessary fluff.
                 	•	Provide real-world examples when explaining concepts.
@@ -82,7 +81,6 @@ const model = genAI.getGenerativeModel({
 
 async function generateContent(prompt) {
   const result = await model.generateContent(prompt);
-  console.log(result.response.text());
   return result.response.text();
 }
 
