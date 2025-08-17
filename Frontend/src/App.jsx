@@ -9,20 +9,27 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  // const [ count, setCount ] = useState(0)
-  const [ code, setCode ] = useState(` function sum() {
+  const [code, setCode] = useState(`function sum() {
   return 1 + 1
 }`)
 
-  const [ review, setReview ] = useState(``)
+  const [review, setReview] = useState(``)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     prism.highlightAll()
-  }, [])
+  }, [code])
 
   async function reviewCode() {
-    const response = await axios.post('https://ai-review-app-1.onrender.com/', { code })
-    setReview(response.data)
+    setLoading(true)
+    try {
+      const response = await axios.post('https://ai-review-app-1.onrender.com/ai/get-review', { code })
+      setReview(response.data)
+    } catch (error) {
+      console.error("Failed to get review:", error)
+      setReview("Error: Unable to fetch review. Please try again.")
+    }
+    setLoading(false)
   }
 
   return (
@@ -46,21 +53,21 @@ function App() {
             />
           </div>
           <div
-            onClick={reviewCode}
-            className="review">Review</div>
+            onClick={loading ? null : reviewCode}
+            className="review"
+            style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? "none" : "auto" }}
+          >
+            {loading ? "Reviewing..." : "Review"}
+          </div>
         </div>
         <div className="right">
-          <Markdown
-
-            rehypePlugins={[ rehypeHighlight ]}
-
-          >{review}</Markdown>
+          <Markdown rehypePlugins={[rehypeHighlight]}>
+            {review}
+          </Markdown>
         </div>
       </main>
     </>
   )
 }
-
-
 
 export default App
